@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
@@ -40,14 +41,14 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
 
         public static int[] SelectMeals(int[] protein, int[] carbs, int[] fat, string[] dietPlans)
         {
-            int len = protein.Length;
-            int[] TotlCalo = new int[len];
+            int menuLength = protein.Length;
+            int[] TotalCalories = new int[menuLength];
+            int[] mealPlan = new int[dietPlans.Length];
 
             //calculating calorie for each item
-            for (int i = 0; i < len; i++) {
-                TotlCalo[i] = (protein[i] + carbs[i]) * 5 + fat[i] * 9;
+            for (int i = 0; i < menuLength; i++) {
+                TotalCalories[i] = (protein[i] + carbs[i]) * 5 + fat[i] * 9;
             }
-            int[] mealPlan = new int[dietPlans.Length];
 
             for (int i = 0; i < dietPlans.Length; i++) {
                 string plan = dietPlans[i];
@@ -57,85 +58,87 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
                     continue;
                 }
 
-                List<int> indx = new List<int>();
-                List<int> indx2 = new List<int>();
+                List<int> indexPositions = new List<int>();
 
-                for (int j = 0; j < len; j++) indx.Add(j);
+                for (int j = 0; j < menuLength; j++) indexPositions.Add(j);
 
-                int max, min;
+                int maximum, minimum;
                 foreach (char ch in plan) {
                     switch(ch) {
                         case 'P':
-                            max = FindMax(protein, indx);
-                            indx = FindAllIndices(protein, indx, max);
+                            maximum = FindMax(protein, indexPositions);
+                            indexPositions = FindAllIndices(protein, indexPositions, maximum);
                             break;
                         case 'p':
-                            min = FindMin(protein, indx);
-                            indx = FindAllIndices(protein, indx, min);
+                            minimum = FindMin(protein, indexPositions);
+                            indexPositions = FindAllIndices(protein, indexPositions, minimum);
                             break;
                         case 'C':
-                            max = FindMax(carbs, indx);
-                            indx = FindAllIndices(carbs, indx, max);
+                            maximum = FindMax(carbs, indexPositions);
+                            indexPositions = FindAllIndices(carbs, indexPositions, maximum);
                             break;
                         case 'c':
-                            min = FindMin(carbs, indx);
-                            indx = FindAllIndices(carbs, indx, min);
+                            minimum = FindMin(carbs, indexPositions);
+                            indexPositions = FindAllIndices(carbs, indexPositions, minimum);
                             break;
                         case 'F':
-                            max = FindMax(fat, indx);
-                            indx = FindAllIndices(fat, indx, max);
+                            maximum = FindMax(fat, indexPositions);
+                            indexPositions = FindAllIndices(fat, indexPositions, maximum);
                             break;
                         case 'f':
-                            min = FindMin(fat, indx);
-                            indx = FindAllIndices(fat, indx, min);
+                            minimum = FindMin(fat, indexPositions);
+                            indexPositions = FindAllIndices(fat, indexPositions, minimum);
                             break;
                         case 'T':
-                            max = FindMax(TotlCalo, indx);
-                            indx = FindAllIndices(TotlCalo, indx, max);
+                            maximum = FindMax(TotalCalories, indexPositions);
+                            indexPositions = FindAllIndices(TotalCalories, indexPositions, maximum);
                             break;
                         case 't':
-                            min = FindMin(TotlCalo, indx);
-                            indx = FindAllIndices(TotlCalo, indx, min);
+                            minimum = FindMin(TotalCalories, indexPositions);
+                            indexPositions = FindAllIndices(TotalCalories, indexPositions, minimum);
                             break;
                     }
                 }
 
-                mealPlan[i] = indx[0];
+                mealPlan[i] = indexPositions[0];
             }
 
             return mealPlan;
         }
 
         public static List<int> FindAllIndices(int[] arr, List<int> pos, int elem) {
-            List<int> indx = new List<int>();
+            List<int> indexPositions = new List<int>();
 
             foreach (int i in pos) {
-                if (arr[i] == elem) indx.Add(i);
+                if (arr[i] == elem) indexPositions.Add(i);
             }
 
-            return indx;
+            return indexPositions;
         }
 
-        public static int FindMax(int[] arr, List<int> indx) {
-            if (indx.Count == 1) return arr[indx[0]];
+        public static int FindMax(int[] arr, List<int> indexPositions) {
+            if (indexPositions.Count == 1) return arr[indexPositions[0]];
 
-            int max = arr[indx[0]];
+            int maximum = arr[indexPositions[0]];
 
-            for (int i = 1; i < indx.Count; i++) {
-                if (arr[indx[i]] > max) max = arr[indx[i]];
+            for (int i = 1; i < indexPositions.Count; i++) {
+                if (arr[indexPositions[i]] > maximum) maximum = arr[indexPositions[i]];
             }
 
-            return max;
+            return maximum;
         }
-        public static int FindMin(int[] arr, List<int> indx) {
-            if (indx.Count == 1) return arr[indx[0]];
+        
+        public static int FindMin(int[] arr, List<int> indexPositions) {
+            if (indexPositions.Count == 1) return arr[indexPositions[0]];
 
-            int min = arr[indx[0]];
+            int minimum = arr[indexPositions[0]];
 
-            for (int i = 1; i < indx.Count; i++) {
-                if (arr[indx[i]] < min) min = arr[indx[i]];
+            for (int i = 1; i < indexPositions.Count; i++) {
+                if (arr[indexPositions[i]] < minimum) minimum = arr[indexPositions[i]];
             }
 
-            return min;
-        } 
+            return minimum;
+        }
+    }
+} 
 
